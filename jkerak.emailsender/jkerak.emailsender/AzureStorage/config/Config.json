@@ -1,0 +1,138 @@
+[
+  {
+    "Id": "pulsecheck",
+    "Type": "scheduled",
+    "isEnabled": "true",
+    "CanUnsubscribe": "false",
+    "ScheduleUtc": "0 14 * * *",
+    "Parameters": [
+      {
+        "Key": "SQL",
+        "Value": "pulsecheck.sql"
+      },
+      {
+        "Key": "EmailSubject",
+        "Value": "Jim! The engine ran!"
+      },
+      {
+        "Key": "EmailTemplate",
+        "Value": "tmmoutage.html"
+      }
+    ]
+  },
+  {
+    "Id": "noappusage",
+    "Type": "scheduled",
+    "isEnabled": "true",
+    "CanUnsubscribe": "true",
+    "ScheduleUtc": "0 14 * * *",
+    "Recurrence": {
+      "Period": "month",
+      "TotalMaximumDeliveries": 3
+    },
+    "Parameters": [
+      {
+        "Key": "SQL",
+        "Value": "noappusage.sql"
+      },
+      {
+        "Key": "EmailSubject",
+        "Value": "More MONEY in your pocket"
+      },
+      {
+        "Key": "EmailTemplate",
+        "Value": "noappusage.html"
+      }
+    ]
+  },
+  {
+    "Id": "samedaypaymentscheduled",
+    "Type": "triggered",
+    "TriggerTopic": "loan-payment-scheduled",
+    "isEnabled": "false",
+    "CanUnsubscribe": "false",
+    "PersonIdPath": "$.Entity.personID",
+    "Parameters": [
+      {
+        "Key": "EmailSubject",
+        "Value": "Notification - PaymentMade"
+      },
+      {
+        "Key": "EmailTemplate",
+        "Value": "samedaypaymentscheduled.html"
+      }
+    ],
+    "Filter": {
+      "Predicate": "$.Entity.useCase",
+      "Operator": "=",
+      "Value": "samedaypaymentscheduled"
+    },
+    "TemplateMessageParameters": [
+      {
+        "Key": "Amount",
+        "Value": "$.Entity.amount"
+      },
+      {
+        "Key": "Last4FromAccount",
+        "Value": "$.Entity.last4FromAccount"
+      },
+      {
+        "Key": "Last4ToAccount",
+        "Value": "$.Entity.last4ToAccount"
+      },
+      {
+        "Key": "SubmittedDate",
+        "Value": "$.Entity.submittedDate"
+      },
+      {
+        "Key": "PaymentDate",
+        "Value": "$.Entity.paymentDate"
+      }
+    ]
+  },
+  {
+    "Id": "futurepaymentscheduled",
+    "Type": "triggered",
+    "TriggerTopic": "loan-payment-scheduled",
+    "isEnabled": "true",
+    "CanUnsubscribe": "false",
+    "PersonIdPath": "$.Entity.personID",
+    "Parameters": [
+      {
+        "Key": "EmailSubject",
+        "Value": "Notification - PaymentMade"
+      },
+      {
+        "Key": "EmailTemplate",
+        "Value": "futurepaymentscheduled.html"
+      }
+    ],
+    "Filter": {
+      "Predicate": "$.Entity.useCase",
+      "Operator": "=",
+      "Value": "futurepaymentscheduled"
+    },
+    "TemplateMessageParameters": [
+      {
+        "Key": "Amount",
+        "Value": "$.Entity.amount"
+      },
+      {
+        "Key": "Last4FromAccount",
+        "Value": "$.Entity.last4FromAccount"
+      },
+      {
+        "Key": "Last4ToAccount",
+        "Value": "$.Entity.last4ToAccount"
+      },
+      {
+        "Key": "SubmittedDate",
+        "Value": "$.Entity.submittedDate"
+      },
+      {
+        "Key": "PaymentDate",
+        "Value": "$.Entity.paymentDate"
+      }
+    ]
+  }
+]

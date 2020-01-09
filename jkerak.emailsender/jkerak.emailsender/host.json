@@ -1,0 +1,21 @@
+{
+    "version": "2.0",
+    "extensions": {
+        "durableTask": {
+            "storageProvider": {
+                "controlQueueBatchSize": 32,
+                "partitionCount": 4
+            },
+            "hubName": "taskhub",    
+            "extendedSessionsEnabled": true,
+            "extendedSessionIdleTimeoutInSeconds": 30,
+            "maxConcurrentActivityFunctions": 10,
+            "maxConcurrentOrchestratorFunctions": 10
+        }
+    },
+    "logging": {
+        "logLevel": {
+            "Host.Triggers.DurableTask": "Debug"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "MAILGUN_API_KEY": "",
+    "MAILGUN_DOMAIN": "",
+    "EMAIL_TAG_PREFIX": "",
+    "BLOB_CONNECTION_STRING": "",
+    "ServiceBusConnectionString": "",
+    "HUB_CONNECTION_STRING": "",
+    "EVENT_HUB_CONNECTION_STRING": "",
+    "EVENT_HUB_NAME": "",
+    "EmbeddedSiteUrl": ""
+  }
+}

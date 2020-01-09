@@ -1,0 +1,66 @@
+stages:
+- stage: Build
+  jobs:
+  - job: Build 
+    pool:
+      name: Hosted Ubuntu 1604
+    variables:
+      CSProgPATH: 'jkerak.emailsender/jkerak.emailsender/jkerak.emailsender.csproj'
+      
+    steps:
+      - task: DotNetCoreCLI@2
+        displayName: Restore
+        inputs:
+          command: restore
+          projects: '$(CSProgPATH)'
+          vstsFeed: 'd6b71ecd-8a13-41ae-8bb7-2ea10e3b13ca'
+          feedsToUse: config
+          nugetConfigPath: 'jkerak.emailsender/jkerak.emailsender/NuGet.Config'
+    
+      - task: DotNetCoreCLI@2
+        displayName: Build
+        inputs:
+          projects: '$(CSProgPATH)'
+          arguments: '--configuration $(BuildConfiguration)'
+    
+      - task: DotNetCoreCLI@2
+        displayName: Publish
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: '$(CSProgPATH)'
+          arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+          zipAfterPublish: True
+    
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact'
+        inputs:
+          PathtoPublish: '$(build.artifactstagingdirectory)'
+          ArtifactName: CCEManager2
+        condition: succeededOrFailed()
+
+- stage: ReleaseDV
+  jobs:
+  - job: ReleaseDV
+    pool:
+      name: NetworkHub-EastUS2
+      demands: azureps
+    variables:
+      CSProgPATH: 'Relative CSProjPAth'
+      VSTS_ARM_REST_IGNORE_SSL_ERRORS: true
+    steps:      
+    - checkout: none
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        artifactName: CCEManager2
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Azure App Service Deploy: FA-NotificationManager-DV-Cobalt-EastUS2'
+      inputs:
+        azureSubscription: 'dev'
+        appType: functionApp
+        WebAppName: 'FA-NotificationManager-DV-Cobalt-EastUS2'
+        deployToSlotOrASE: true
+        ResourceGroupName: 'RG-WebApps-COB-DV-EastUS2'
+        enableCustomDeployment: true
+        DeploymentType: zipDeploy
+        package: $(build.artifactstagingdirectory)/**/*.zip
